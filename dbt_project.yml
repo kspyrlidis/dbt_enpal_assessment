@@ -31,6 +31,15 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   enpal_assessment_project:
-    # Config indicated by + and applies to all files under models/example/
-    +schema: pipedrive_analytics
-    +materialized: table
+    +database: dbt_pipedrive_analytics
+    +persist_docs:
+      relation: true
+      columns: true
+    staging:
+      +schema: staging
+    prep:
+      +schema: prep
+    curated:
+      +schema: curated
+    reporting:
+      +schema: reporting
