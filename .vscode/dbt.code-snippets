@@ -1,0 +1,65 @@
+{
+    "DBT model template": {
+        "prefix": "template_dbt_model",
+        "scope": "sql, jinja-sql",
+        "body": [
+            "-- config_placeholder",
+            "with",
+            "----------------------------------------------------------------------------------------------------",
+            "-- ==== START >> IMPORT CTEs",
+            "",
+            "-- ==== END >> IMPORT CTEs",
+            "----------------------------------------------------------------------------------------------------",
+            "----------------------------------------------------------------------------------------------------",
+            "-- ==== START >> Logical CTEs",
+            "",
+            "-- ==== END >> Logical CTEs",
+            "----------------------------------------------------------------------------------------------------",
+            "----------------------------------------------------------------------------------------------------",
+            "-- ==== START >> Final CTE",
+            "final_cte as (",
+            "    ",
+            "    ",
+            ")",
+            "-- ==== END >> Final CTE",
+            "----------------------------------------------------------------------------------------------------",
+            "",
+            "select * from final_cte",
+            ""
+        ],
+        "description": "A basic dbt model template"
+    },
+    "DBT model config template": {
+        "prefix": "dbt_model_config",
+        "scope": "sql, jinja-sql",
+        "body": [
+            "{{ config(",
+            "    materialized='table',",
+            "    tags=['tag1', 'tag2']",
+            ") }}",
+            "",
+            "-- model logic here"
+        ],
+        "description": "A basic dbt model config template"
+    },
+    "DBT ref CTE": {
+        "prefix": "dbt_ref_cte",
+        "scope": "sql, jinja-sql",
+        "body": [
+            "    select *",
+            "    ",
+            "    from {{ ref('${1:model_name}') }}"
+        ],
+        "description": "A basic dbt ref CTE template"
+    },
+    "DBT source CTE": {
+        "prefix": "dbt_source_cte",
+        "scope": "sql, jinja-sql",
+        "body": [
+            "    select *",
+            "    ",
+            "    from {{ source('${1:source_name}', '${2:table_name}') }}"
+        ],
+        "description": "A basic dbt source CTE template"
+    }
+}
