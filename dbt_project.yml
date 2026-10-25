@@ -31,7 +31,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 # files using the `{{ config(...) }}` macro.
 models:
   enpal_assessment_project:
-    +database: dbt_pipedrive_analytics
+    +database: postgres
     +persist_docs:
       relation: true
       columns: true
@@ -43,3 +43,11 @@ models:
       +schema: curated
     reporting:
       +schema: reporting
+
+seeds:
+  enpal_assessment_project:
+    +database: postgres
+    +schema: dbt_seeds
+    +persist_docs:
+      relation: true
+      columns: true
