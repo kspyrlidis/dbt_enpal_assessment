@@ -1,0 +1,28 @@
+version: 2
+
+models:
+  - name: stg_pipedrive__activity_types
+    description: >
+      Staging model for Pipedrive activity types. Activity types represent different kinds of activities that can be
+      stored, and are linked to activities via `activity_type`. One row per activity type, with source columns renamed
+      and the surrogate key `table_uuid` added.
+    columns:
+      - name: table_uuid
+        description: '{{ doc("table_uuid") }}'
+        data_tests:
+          - unique
+          - not_null
+
+      - name: activity_type_id
+        description: '{{ doc("pipedrive__activity_type_id") }}'
+        data_tests:
+          - not_null
+
+      - name: activity_type_name
+        description: '{{ doc("pipedrive__activity_type_name") }}'
+
+      - name: activity_type
+        description: '{{ doc("pipedrive__activity_type") }}'
+
+      - name: is_active
+        description: '{{ doc("pipedrive__is_active") }}'
