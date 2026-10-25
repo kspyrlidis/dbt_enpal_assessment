@@ -139,3 +139,93 @@ The due date and time of the activity.
 
 Source: Pipedrive API, Activities (`due_date` and `due_time`). This is the scheduled time, not the time the activity was marked as done.
 {% enddocs %}
+
+{% docs pipedrive__lost_reason_id %}
+The ID of the lost reason, parsed from the `id` key of the `lost_reason` deal field options. Maps to the `new_value` of a `lost_reason` change in deal changes.
+
+Source: Pipedrive API, DealFields (`options`).
+{% enddocs %}
+
+{% docs pipedrive__lost_reason_name %}
+The name of the lost reason, parsed from the `label` key of the `lost_reason` deal field options.
+
+Source: Pipedrive API, DealFields (`options`).
+{% enddocs %}
+
+{% docs pipedrive__created_timestamp %}
+The date and time when the deal was created.
+
+Source: Pipedrive API, Deals (`add_time`), taken from the `add_time` change in deal changes.
+{% enddocs %}
+
+{% docs pipedrive__funnel_step_number %}
+The number of the funnel step, equal to the `stage_id` the deal moved into. Stages are numbered in funnel order, so a higher number means a later step.
+
+Source: Pipedrive API, Deals (List updates about deal field values) and Stages.
+{% enddocs %}
+
+{% docs pipedrive__funnel_step_name %}
+The name of the funnel step, equal to the `stage_name` of the stage the deal moved into.
+
+Source: Pipedrive API, Stages.
+{% enddocs %}
+
+{% docs pipedrive__valid_from %}
+The date when the deal entered the funnel step, taken from the `change_date` of the `stage_id` change.
+{% enddocs %}
+
+{% docs pipedrive__valid_to %}
+The date when the deal left the funnel step, equal to the `valid_from` of the deal's next step (exclusive). For the last step of a lost deal it is the `lost_date`, and for the step an open deal is currently in it is `9999-12-31`.
+{% enddocs %}
+
+{% docs pipedrive__owner_user_id %}
+The ID of the user who owns the deal, taken from the `new_value` of the `user_id` change. Maps to `user_id` in users.
+
+Source: Pipedrive API, Deals (List updates about deal field values) and Users.
+{% enddocs %}
+
+{% docs pipedrive__owner_valid_from %}
+The date when the user became the owner of the deal, taken from the `change_date` of the `user_id` change.
+{% enddocs %}
+
+{% docs pipedrive__owner_valid_to %}
+The date when the deal was reassigned to another user, equal to the `valid_from` of the deal's next owner (exclusive). Set to `9999-12-31` for the current owner.
+{% enddocs %}
+
+{% docs pipedrive__is_lost %}
+Whether the deal was lost, i.e. has a `lost_reason` change. A deal-level flag, repeated on every step of the deal.
+
+Source: Pipedrive API, Deals (List updates about deal field values).
+{% enddocs %}
+
+{% docs pipedrive__lost_date %}
+The date when the deal was lost, taken from the `change_date` of the `lost_reason` change. Null for deals that were not lost.
+
+Source: Pipedrive API, Deals (List updates about deal field values).
+{% enddocs %}
+
+{% docs pipedrive__lost_reason %}
+The reason the deal was lost, mapped from the `lost_reason` change to the lost reason name in `prep_pipedrive__lost_reasons`. Null for deals that were not lost.
+
+Source: Pipedrive API, Deals (List updates about deal field values) and DealFields (`options`).
+{% enddocs %}
+
+{% docs rep__month %}
+The reporting month, as the first day of the month. Spans from the month of the first deal creation to the month of the last step entry, so both the flow and the cohort view are fully covered.
+{% enddocs %}
+
+{% docs rep__kpi_name %}
+The name of the funnel step (KPI), equal to the stage name.
+{% enddocs %}
+
+{% docs rep__funnel_step %}
+The number of the funnel step, equal to the stage ID. Stages are numbered in funnel order.
+{% enddocs %}
+
+{% docs rep__deals_count %}
+Flow view: the number of distinct deals that entered the funnel step during the month, based on the `valid_from` of the step. A deal counts only for the steps it actually entered, so counts can increase from one step to the next within a month.
+{% enddocs %}
+
+{% docs rep__cohort_deals_count %}
+Cohort view: the number of deals created in the month that reached the funnel step at any time. Deals can skip steps, so a deal counts for every step up to the furthest one it reached, which keeps the funnel non-increasing from one step to the next. Zero for months without deal creations, and incomplete for recent cohorts whose deals are still progressing.
+{% enddocs %}

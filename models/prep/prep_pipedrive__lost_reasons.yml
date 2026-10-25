@@ -1,0 +1,22 @@
+version: 2
+
+models:
+  - name: prep_pipedrive__lost_reasons
+    description: >
+      Prep model for Pipedrive lost reasons. Parses the JSON options of the `lost_reason` deal field in
+      `stg_pipedrive__fields` into one row per lost reason, which can be joined against the `lost_reason` value
+      in deal changes.
+    columns:
+      - name: table_uuid
+        description: '{{ doc("table_uuid") }}'
+        data_tests:
+          - unique
+          - not_null
+
+      - name: lost_reason_id
+        description: '{{ doc("pipedrive__lost_reason_id") }}'
+        data_tests:
+          - not_null
+
+      - name: lost_reason_name
+        description: '{{ doc("pipedrive__lost_reason_name") }}'
