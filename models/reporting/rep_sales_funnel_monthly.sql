@@ -16,6 +16,7 @@ stages as (
     from {{ ref('stg_pipedrive__stages') }}
 
 ),
+
 -- ==== END >> IMPORT CTEs
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -33,8 +34,7 @@ min_max_months as (
 
 months_spine as (
 
-    select
-        generate_series(min_month, max_month, interval '1 month')::date as month
+    select generate_series(min_month, max_month, interval '1 month')::date as month
 
     from min_max_months
 
@@ -43,9 +43,9 @@ months_spine as (
 months_spine_enriched as (
 
     select
-        months_spine.month as month,
-        stages.stage_id    as funnel_step,
-        stages.stage_name  as kpi_name
+        months_spine.month,
+        stages.stage_id   as funnel_step,
+        stages.stage_name as kpi_name
 
     from months_spine
 
@@ -56,9 +56,9 @@ months_spine_enriched as (
 deals as (
 
     select
-        deal_uuid                                              as deal_uuid,
-        cast(date_trunc('month', created_timestamp) as date)   as created_month,
-        max(funnel_step_number)                                as max_funnel_step
+        deal_uuid,
+        (date_trunc('month', created_timestamp))::date as created_month,
+        max(funnel_step_number)                        as max_funnel_step
 
     from deal_steps
 
@@ -70,9 +70,9 @@ deals as (
 flow_counts as (
 
     select
-        cast(date_trunc('month', valid_from) as date) as month,
-        funnel_step_number                            as funnel_step,
-        count(distinct deal_uuid)                     as deals_count
+        (date_trunc('month', valid_from))::date as month,
+        funnel_step_number                      as funnel_step,
+        count(distinct deal_uuid)               as deals_count
 
     from deal_steps
 
@@ -92,11 +92,12 @@ cohort_counts as (
     from deals
 
     inner join stages
-        on stages.stage_id <= deals.max_funnel_step
+        on deals.max_funnel_step >= stages.stage_id
 
     group by 1, 2
 
 ),
+
 -- ==== END >> Logic CTEs
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -108,9 +109,9 @@ final_cte as (
             'month_spine.month',
             'month_spine.funnel_step',
         ]) }}                                         as table_uuid,
-        month_spine.month                             as month,
-        month_spine.kpi_name                          as kpi_name,
-        month_spine.funnel_step                       as funnel_step,
+        month_spine.month,
+        month_spine.kpi_name,
+        month_spine.funnel_step,
         coalesce(flow_counts.deals_count, 0)          as deals_count,
         coalesce(cohort_counts.cohort_deals_count, 0) as cohort_deals_count
 

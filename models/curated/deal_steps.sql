@@ -24,6 +24,7 @@ lost_reasons as (
     from {{ ref('prep_pipedrive__lost_reasons') }}
 
 ),
+
 -- ==== END >> IMPORT CTEs
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -31,8 +32,8 @@ lost_reasons as (
 deal_created as (
 
     select
-        deal_uuid                      as deal_uuid,
-        cast(new_value as timestamp)   as created_timestamp
+        deal_uuid,
+        cast(new_value as timestamp) as created_timestamp
 
     from deal_changes
 
@@ -43,9 +44,9 @@ deal_created as (
 deal_lost as (
 
     select
-        deal_changes.deal_uuid          as deal_uuid,
-        deal_changes.change_date        as lost_date,
-        lost_reasons.lost_reason_name   as lost_reason
+        deal_changes.deal_uuid,
+        deal_changes.change_date      as lost_date,
+        lost_reasons.lost_reason_name as lost_reason
 
     from deal_changes
 
@@ -59,18 +60,19 @@ deal_lost as (
 stage_changes as (
 
     select
-        deal_uuid                                                                   as deal_uuid,
-        deal_id                                                                     as deal_id,
-        cast(new_value as integer)                                                  as stage_id,
-        change_date                                                                 as valid_from,
+        deal_uuid,
+        deal_id,
+        cast(new_value as integer)                                           as stage_id,
+        change_date                                                          as valid_from,
         -- the step is valid until the deal moves to the next step, null for the current one
-        lead(change_date) over (partition by deal_uuid order by change_date)        as next_step_date
+        lead(change_date) over (partition by deal_uuid order by change_date) as next_step_date
 
     from deal_changes
 
     where changed_field_key = 'stage_id'
 
 ),
+
 -- ==== END >> Logic CTEs
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -79,15 +81,15 @@ final_cte as (
 
     select
         {{ generate_table_uuid(['stage_changes.deal_uuid', 'stage_changes.stage_id']) }} as table_uuid,
-        stage_changes.deal_uuid                                                          as deal_uuid,
-        stage_changes.deal_id                                                            as deal_id,
-        deal_created.created_timestamp                                                   as created_timestamp,
+        stage_changes.deal_uuid,
+        stage_changes.deal_id,
+        deal_created.created_timestamp,
         deal_lost.deal_uuid is not null                                                  as is_lost,
-        deal_lost.lost_date                                                              as lost_date,
-        deal_lost.lost_reason                                                            as lost_reason,
+        deal_lost.lost_date,
+        deal_lost.lost_reason,
         stages.stage_id                                                                  as funnel_step_number,
         stages.stage_name                                                                as funnel_step_name,
-        stage_changes.valid_from                                                         as valid_from,
+        stage_changes.valid_from,
         -- the current step of a lost deal closes on the lost date, otherwise it stays open
         coalesce(
             stage_changes.next_step_date,

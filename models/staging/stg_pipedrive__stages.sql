@@ -9,19 +9,20 @@ stages as (
     from {{ source('postgres_public', 'stages') }}
 
 ),
+
 -- ==== END >> IMPORT CTEs
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 -- ==== START >> Final CTE
 final_cte as (
 
-    select 
+    select
         {{ generate_table_uuid(['stage_id']) }} as table_uuid,
-        stage_id                                as stage_id,
-        stage_name                              as stage_name
+        stage_id,
+        stage_name
 
     from stages
-    
+
 )
 -- ==== END >> Final CTE
 ----------------------------------------------------------------------------------------------------

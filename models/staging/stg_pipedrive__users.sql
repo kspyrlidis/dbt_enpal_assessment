@@ -9,13 +9,14 @@ users as (
     from {{ source('postgres_public', 'users') }}
 
 ),
+
 -- ==== END >> IMPORT CTEs
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
 -- ==== START >> Final CTE
 final_cte as (
 
-    select 
+    select
         {{ generate_table_uuid(['id']) }} as table_uuid,
         id                                as user_id,
         name                              as user_name,
@@ -23,7 +24,7 @@ final_cte as (
         modified                          as modified_timestamp
 
     from users
-    
+
 )
 -- ==== END >> Final CTE
 ----------------------------------------------------------------------------------------------------

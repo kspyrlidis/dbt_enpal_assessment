@@ -10,6 +10,7 @@ fields as (
     where field_key = 'lost_reason'
 
 ),
+
 -- ==== END >> IMPORT CTEs
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -21,10 +22,11 @@ parsed_options as (
         options.value ->> 'label' as lost_reason_name
 
     from fields
-    
-    cross join jsonb_array_elements(fields.field_value_options) as options(value)
+
+    cross join jsonb_array_elements(fields.field_value_options) as options (value)
 
 ),
+
 -- ==== END >> Logic CTEs
 ----------------------------------------------------------------------------------------------------
 ----------------------------------------------------------------------------------------------------
@@ -33,8 +35,8 @@ final_cte as (
 
     select
         {{ generate_table_uuid(['lost_reason_id']) }} as table_uuid,
-        lost_reason_id                                as lost_reason_id,
-        lost_reason_name                              as lost_reason_name
+        lost_reason_id,
+        lost_reason_name
 
     from parsed_options
 
