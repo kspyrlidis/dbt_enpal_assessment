@@ -4,7 +4,8 @@ models:
   - name: stg_pipedrive__deal_changes
     description: >
       Staging model for Pipedrive deal changes, the changelog of deal field values. One row per deal and change
-      timestamp, with source columns renamed and the surrogate key `table_uuid` added.
+      timestamp, with source columns renamed, the surrogate key `table_uuid` added, and `deal_uuid` added to
+      separate distinct deals that were issued the same `deal_id`.
     columns:
       - name: table_uuid
         description: '{{ doc("table_uuid") }}'
@@ -12,13 +13,18 @@ models:
           - unique
           - not_null
 
+      - name: deal_uuid
+        description: '{{ doc("pipedrive__deal_uuid") }}'
+        data_tests:
+          - not_null
+
       - name: deal_id
         description: '{{ doc("pipedrive__deal_id") }}'
         data_tests:
           - not_null
 
-      - name: change_timestamp
-        description: '{{ doc("pipedrive__change_timestamp") }}'
+      - name: change_date
+        description: '{{ doc("pipedrive__change_date") }}'
         data_tests:
           - not_null
 

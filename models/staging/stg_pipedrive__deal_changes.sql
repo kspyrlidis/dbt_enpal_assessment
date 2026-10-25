@@ -11,18 +11,33 @@ deal_changes as (
 ),
 -- ==== END >> IMPORT CTEs
 ----------------------------------------------------------------------------------------------------
+add_timestamps as (
+
+    select
+        *,
+        -- one deal has only one hh:mm:ss across all the changes, so it can be dropped
+        cast(change_time as date)                    as change_date,
+        -- in rare cases the same deal_id was issued for >1 deals
+        -- the only way to differentiate them is by hh:mm:ss
+        -- as it corresponds to one deal. See the example with deal_id = 399956
+        change_time - date_trunc('day', change_time) as timestamp_wo_date
+        
+    from deal_changes
+
+),
 ----------------------------------------------------------------------------------------------------
 -- ==== START >> Final CTE
 final_cte as (
 
-    select 
-        {{ generate_table_uuid(['deal_id', 'change_time']) }} as table_uuid,
-        deal_id                                               as deal_id,
-        change_time                                           as change_timestamp,
-        changed_field_key                                     as changed_field_key,
-        new_value                                             as new_value
+    select
+        {{ generate_table_uuid(['deal_id', 'change_time']) }}       as table_uuid,
+        {{ generate_table_uuid(['deal_id', 'timestamp_wo_date']) }} as deal_uuid,
+        deal_id                                                     as deal_id,
+        change_date                                                 as change_date,
+        changed_field_key                                           as changed_field_key,
+        new_value                                                   as new_value
 
-    from deal_changes
+    from add_timestamps
     
 )
 -- ==== END >> Final CTE

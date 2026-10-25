@@ -38,10 +38,16 @@ Whether the activity type is active. Converted to a boolean from the text values
 Source: Pipedrive API, ActivityTypes (`active_flag`).
 {% enddocs %}
 
-{% docs pipedrive__change_timestamp %}
-The date and time when the deal field value was changed.
+{% docs pipedrive__change_date %}
+The date when the deal field value was changed.
 
 Source: Pipedrive API, Deals (List updates about deal field values).
+{% enddocs %}
+
+{% docs pipedrive__deal_uuid %}
+Surrogate key of the deal, generated with the `generate_table_uuid` macro from `deal_id` and the time of day (hh:mm:ss) of the change.
+
+In this dataset, all changes of one deal share the same time of day, while a few `deal_id`s were issued to more than one deal (e.g. `deal_id = 399956`). The time of day is the only way to tell those deals apart. Use `deal_uuid` instead of `deal_id` to count deals.
 {% enddocs %}
 
 {% docs pipedrive__field_id %}
