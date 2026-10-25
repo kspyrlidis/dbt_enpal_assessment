@@ -37,12 +37,16 @@ models:
       columns: true
     staging:
       +schema: staging
+      +materialized: view
     prep:
       +schema: prep
+      +materialized: view
     curated:
       +schema: curated
+      +materialized: table
     reporting:
       +schema: reporting
+      +materialized: table
 
 seeds:
   enpal_assessment_project:
