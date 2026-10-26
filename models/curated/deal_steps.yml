@@ -1,0 +1,55 @@
+version: 2
+
+models:
+  - name: deal_steps
+    description: >
+      Curated model of the funnel steps each deal went through, built from the `stage_id` changes in
+      `stg_pipedrive__deal_changes` and the stage names in `stg_pipedrive__stages`, enriched with the lost date and
+      lost reason of the deal from the `lost_reason` changes and `prep_pipedrive__lost_reasons`. One row per deal and
+      funnel step, with the period during which the deal was in that step.
+    columns:
+      - name: table_uuid
+        description: '{{ doc("table_uuid") }}'
+        data_tests:
+          - unique
+          - not_null
+
+      - name: deal_uuid
+        description: '{{ doc("pipedrive__deal_uuid") }}'
+
+      - name: deal_id
+        description: '{{ doc("pipedrive__deal_id") }}'
+
+      - name: created_timestamp
+        description: '{{ doc("pipedrive__created_timestamp") }}'
+
+      - name: funnel_step_number
+        description: '{{ doc("pipedrive__funnel_step_number") }}'
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_pipedrive__stages')
+                field: stage_id
+
+      - name: funnel_step_name
+        description: '{{ doc("pipedrive__funnel_step_name") }}'
+
+      - name: valid_from
+        description: '{{ doc("pipedrive__valid_from") }}'
+        data_tests:
+          - not_null
+
+      - name: valid_to
+        description: '{{ doc("pipedrive__valid_to") }}'
+        data_tests:
+          - not_null
+
+      - name: is_lost
+        description: '{{ doc("pipedrive__is_lost") }}'
+
+      - name: lost_date
+        description: '{{ doc("pipedrive__lost_date") }}'
+
+      - name: lost_reason
+        description: '{{ doc("pipedrive__lost_reason") }}'

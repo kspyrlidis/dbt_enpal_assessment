@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: stg_pipedrive__users
+    description: >
+      Staging model for Pipedrive users, the people with access to the Pipedrive account. One row per user, with source
+      columns renamed and the surrogate key `table_uuid` added.
+    columns:
+      - name: table_uuid
+        description: '{{ doc("table_uuid") }}'
+        data_tests:
+          - unique
+          - not_null
+
+      - name: user_id
+        description: '{{ doc("pipedrive__user_id") }}'
+        data_tests:
+          - not_null
+
+      - name: user_name
+        description: '{{ doc("pipedrive__user_name") }}'
+
+      - name: user_email
+        description: '{{ doc("pipedrive__user_email") }}'
+
+      - name: modified_timestamp
+        description: '{{ doc("pipedrive__modified_timestamp") }}'

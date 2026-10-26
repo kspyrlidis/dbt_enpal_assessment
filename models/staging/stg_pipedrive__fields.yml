@@ -1,0 +1,27 @@
+version: 2
+
+models:
+  - name: stg_pipedrive__fields
+    description: >
+      Staging model for Pipedrive deal fields, the schema of the deal fields tracked in deal changes. One row per deal
+      field, with source columns renamed and the surrogate key `table_uuid` added.
+    columns:
+      - name: table_uuid
+        description: '{{ doc("table_uuid") }}'
+        data_tests:
+          - unique
+          - not_null
+
+      - name: field_id
+        description: '{{ doc("pipedrive__field_id") }}'
+        data_tests:
+          - not_null
+
+      - name: field_key
+        description: '{{ doc("pipedrive__field_key") }}'
+
+      - name: field_name
+        description: '{{ doc("pipedrive__field_name") }}'
+
+      - name: field_value_options
+        description: '{{ doc("pipedrive__field_value_options") }}'

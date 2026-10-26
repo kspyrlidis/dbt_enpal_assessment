@@ -1,0 +1,30 @@
+version: 2
+
+models:
+  - name: rep_sales_funnel_monthly
+    description: >
+      Reporting model of the monthly sales funnel, built from `deal_steps`. One row per month and funnel step, with two
+      views of the funnel: `deals_count` (flow) counts the deals that entered the step in the month, and
+      `cohort_deals_count` (cohort) counts the deals created in the month that reached the step. Months span from the
+      first deal creation month to the last step entry month.
+    columns:
+      - name: table_uuid
+        description: '{{ doc("table_uuid") }}'
+        data_tests:
+          - unique
+          - not_null
+
+      - name: month
+        description: '{{ doc("rep__month") }}'
+
+      - name: kpi_name
+        description: '{{ doc("rep__kpi_name") }}'
+
+      - name: funnel_step
+        description: '{{ doc("rep__funnel_step") }}'
+
+      - name: deals_count
+        description: '{{ doc("rep__deals_count") }}'
+
+      - name: cohort_deals_count
+        description: '{{ doc("rep__cohort_deals_count") }}'

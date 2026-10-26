@@ -1,0 +1,49 @@
+version: 2
+
+models:
+  - name: deal_owners
+    description: >
+      Curated SCD2 model of the owners of each deal, built from the `user_id` changes in
+      `stg_pipedrive__deal_changes` and enriched with the user attributes in `stg_pipedrive__users`. One row per deal
+      and owner assignment, with the period during which the user owned the deal.
+    columns:
+      - name: table_uuid
+        description: '{{ doc("table_uuid") }}'
+        data_tests:
+          - unique
+          - not_null
+
+      - name: deal_uuid
+        description: '{{ doc("pipedrive__deal_uuid") }}'
+        data_tests:
+          - not_null
+
+      - name: deal_id
+        description: '{{ doc("pipedrive__deal_id") }}'
+        data_tests:
+          - not_null
+
+      - name: user_id
+        description: '{{ doc("pipedrive__owner_user_id") }}'
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('stg_pipedrive__users')
+                field: user_id
+
+      - name: user_name
+        description: '{{ doc("pipedrive__user_name") }}'
+
+      - name: user_email
+        description: '{{ doc("pipedrive__user_email") }}'
+
+      - name: valid_from
+        description: '{{ doc("pipedrive__owner_valid_from") }}'
+        data_tests:
+          - not_null
+
+      - name: valid_to
+        description: '{{ doc("pipedrive__owner_valid_to") }}'
+        data_tests:
+          - not_null

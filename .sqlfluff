@@ -1,0 +1,62 @@
+[sqlfluff]
+dialect = postgres
+templater = dbt
+runaway_limit = 10
+max_line_length = 120
+exclude_rules = ST06, AM04, RF02, LT02, RF04
+
+[sqlfluff:templater:dbt]
+project_dir = .
+profiles_dir = .
+
+[sqlfluff:indentation]
+indent_unit = space
+tab_space_size = 4
+indented_joins = False
+indented_using_on = True
+indented_ctes = False
+implicit_indents = allow
+
+[sqlfluff:layout:type:comma]
+spacing_before = touch
+line_position = trailing
+
+[sqlfluff:layout:type:alias_expression]
+# align "as <alias>" within each select clause
+spacing_before = align
+align_within = select_clause
+align_scope = bracketed
+
+[sqlfluff:layout:type:binary_operator]
+line_position = leading
+
+[sqlfluff:layout:type:comparison_operator]
+line_position = leading
+
+[sqlfluff:rules:capitalisation.keywords]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.identifiers]
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.functions]
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.literals]
+capitalisation_policy = lower
+
+[sqlfluff:rules:capitalisation.types]
+extended_capitalisation_policy = lower
+
+[sqlfluff:rules:aliasing.table]
+aliasing = explicit
+
+[sqlfluff:rules:aliasing.column]
+aliasing = explicit
+
+[sqlfluff:rules:convention.terminator]
+multiline_newline = False
+require_final_semicolon = False
+
+[sqlfluff:rules:references.consistent]
+single_table_references = consistent
